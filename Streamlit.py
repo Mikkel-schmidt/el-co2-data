@@ -68,7 +68,7 @@ if check_password():
         
 
     else:
-        st.write('Goodbye')
+        st.write('Tryk på hent data')
     
 
 

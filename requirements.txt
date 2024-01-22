@@ -136,6 +136,7 @@ webencodings==0.5.1
 websocket-client==1.6.2
 Werkzeug==2.3.6
 win32-setctime==1.1.0
+xlsxwriter==3.1.9
 yarg==0.1.9
 yarl==1.9.2
 zipp==3.16.2
