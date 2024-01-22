@@ -30,12 +30,12 @@ if check_password():
         st.session_state.samlet = pd.DataFrame()
         st.session_state.virksomhed = pd.DataFrame()
 
-    cvr = st.number_input('Input cvr', value=0)  # Is this supposed to be hardcoded later?
+    cvr = st.number_input('Input cvr', value=10373816)  
     fromdate = st.date_input('Input first data')
     area = st.selectbox('Hvilket prisområde:', ('DK1', 'DK2'))
 
     if st.button('Hent data'):
-        st.session_state.samlet, st.session_state.virksomhed = eloverblik_timeseries(cvr, str(fromdate), area)
+        st.session_state.samlet, st.session_state.virksomhed = eloverblik_timeseries(str(cvr), str(fromdate), area)
         st.session_state.data_fetched = True
 
     if st.session_state.data_fetched:
