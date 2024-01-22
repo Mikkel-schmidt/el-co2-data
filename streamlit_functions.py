@@ -5,6 +5,7 @@ from datetime import timedelta
 import requests
 from time import time
 from tqdm import tqdm
+from stqdm import stqdm
 
 
 def get_token():
@@ -68,7 +69,7 @@ def eloverblik_timeseries(CVR, fromdate):
     headers = {'Authorization': 'Bearer ' + access_token,
     'Accept': 'application/json',
     'Content-Type': 'application/json'}
-    for meter in tqdm(meters):
+    for meter in stqdm(meters):
         body = """{{"meteringPoints": {{
             "meteringPoint": ["{0}"]
         }}
