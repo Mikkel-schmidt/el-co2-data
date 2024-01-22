@@ -92,7 +92,7 @@ def eloverblik_timeseries(CVR, fromdate, area):
     i=0
     for meter in stqdm(meters):
         i+=0.5/len(meters)
-        my_bar.progress(0.30+i, text='Henter data fra eloverblik')
+        my_bar.progress(0.30+i, text='Henter timedata fra målerne')
         body = """{{"meteringPoints": {{
             "meteringPoint": ["{0}"]
         }}

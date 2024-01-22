@@ -44,14 +44,14 @@ if check_password():
         st.download_button(
             label="Download data på målerniveau",
             data=maler_excel,
-            file_name='large_df.csv',
+            file_name='large_df.xlsx',
             mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         )
 
         st.download_button(
             label="Download data på virksomhedsniveau",
             data=virksomhed_excel,
-            file_name='large_df.csv',
+            file_name='large_df.xlsx',
             mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         )
 
