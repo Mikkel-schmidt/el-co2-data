@@ -21,6 +21,34 @@ import locale
 st.set_page_config(layout="wide", page_title="Forside", page_icon="https://media.licdn.com/dms/image/C4E0BAQEwX9tzA6x8dw/company-logo_200_200/0/1642666749832?e=2147483647&v=beta&t=UiNzcE1RvJD3kHI218Al7omOzPLhHXXeE_svU4DIwEM")
 st.sidebar.image('https://via.ritzau.dk/data/images/00181/e7ddd001-aee3-4801-845f-38483b42ba8b.png')
 
+def to_excell(df):
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False, sheet_name='Sheet1')
+
+        workbook = writer.book
+        worksheet = writer.sheets['Sheet1']
+
+        # Table format options
+        table_format = {
+            'columns': [{'header': column} for column in df.columns],
+            'style': 'Table Style Medium 9',  # You can choose different styles
+        }
+
+        # Add the DataFrame as an Excel table
+        (max_row, max_col) = df.shape
+        column_settings = [{'header': column} for column in df.columns]
+        worksheet.add_table(0, 0, max_row, max_col - 1, {'columns': column_settings, 'style': 'Table Style Medium 9'})
+
+        # Auto-adjust columns' width
+        for i, col in enumerate(df.columns):
+            # Find the maximum length of the data in the column
+            column_len = max(df[col].astype(str).map(len).max(), len(col)) + 1
+            worksheet.set_column(i, i, column_len)
+
+    processed_data = output.getvalue()
+    return processed_data
+
 if check_password():
     st.success('Login success')
 
