@@ -72,19 +72,25 @@ if check_password():
             processed_data = output.getvalue()
             return processed_data
         
-        df_xlsx = to_excell(samlet)
-        st.download_button(label='📥 Måler niveau',
-                                        data=df_xlsx ,
-                                        file_name= cvr + ' samlet.xlsx')
-
-        df_xlsx = to_excell(virksomhed)
+        df_xlsx_v = to_excell(virksomhed)
         st.download_button(label='📥 Virksomhedsniveau',
-                                        data=df_xlsx ,
+                                        data=df_xlsx_v ,
                                         file_name= cvr + ' virksomhed.xlsx')
         
+        df_xlsx_s = to_excell(samlet)
+        st.download_button(label='📥 Måler niveau',
+                                        data=df_xlsx_s ,
+                                        file_name= cvr + ' samlet.xlsx')
 
-    else:
-        st.write('Tryk på hent data')
+    if df_xlsx_v:
+        st.download_button(label='📥 Virksomhedsniveau',
+                                        data=df_xlsx_v ,
+                                        file_name= cvr + ' virksomhed.xlsx')
+    if df_xlsx_s:
+        st.download_button(label='📥 Måler niveau',
+                                        data=df_xlsx_s ,
+                                        file_name= cvr + ' samlet.xlsx')
+
     
 
 
