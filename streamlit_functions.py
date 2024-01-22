@@ -73,7 +73,7 @@ def eloverblik_timeseries(CVR, fromdate, area):
     co2['HourDK'] = pd.to_datetime(co2['HourDK'])
     co2 = co2[co2['PriceArea']==area]
 
-    my_bar.progress(0.20, text='Henter data fra eloverblik')
+    my_bar.progress(0.20, text='Henter målere fra eloverblik')
 
 
     access_token = get_token()
@@ -81,6 +81,7 @@ def eloverblik_timeseries(CVR, fromdate, area):
     if test != 'Ok':
         return print('Datahub down')
     meters = eloverblik_IDs(CVR)
+    my_bar.progress(0.30, text='Henter data fra målere')
     #meters = IDs
     df = pd.DataFrame(columns=['meter', 'amount',  'from', 'hour'])   
     url = 'https://api.eloverblik.dk/thirdpartyapi/api/meterdata/gettimeseries/' + str(fromdate) + '/2023-10-31/Hour'
@@ -88,7 +89,7 @@ def eloverblik_timeseries(CVR, fromdate, area):
     'Accept': 'application/json',
     'Content-Type': 'application/json'}
     for meter in stqdm(meters):
-        my_bar.progress(0.20+(0.5/len(meters)), text='Henter data fra eloverblik')
+        my_bar.progress(0.30+(0.5/len(meters)), text='Henter data fra eloverblik')
         body = """{{"meteringPoints": {{
             "meteringPoint": ["{0}"]
         }}
@@ -127,7 +128,7 @@ def eloverblik_timeseries(CVR, fromdate, area):
         df_meter = df_meter[['meter', 'amount',  'from', 'hour']]
         df = pd.concat([df, df_meter], ignore_index=True)
 
-    my_bar.progress(0.70, text='Samler data')
+    my_bar.progress(0.80, text='Samler data')
     samlet = df.merge(co2, how='left', left_on='from', right_on='HourDK')
     samlet = samlet.rename(columns={'from':'datetime', 'amount': 'Mængde [kWh]'})
 
