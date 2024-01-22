@@ -32,34 +32,28 @@ if check_password():
     
 
     if st.button('Hent data'):
-        my_bar = st.progress(0, text='Henter CO2 data')
-        # DeclarationEmissionHour
-        response = requests.get(
-            url='https://api.energidataservice.dk/dataset/DeclarationGridEmission?start='+str(fromdate)+'T00:00&limit=400000')
-        result = response.json()
+        
+        samlet, maler_excel, virksomhed_excel = eloverblik_timeseries(cvr, str(fromdate))
 
-        my_bar.progress(10, text='Henter CO2 data')
-        co2 = pd.json_normalize(result, 'records',
-                errors='ignore')
 
-        co2 = co2[co2['FuelAllocationMethod']=='125%']
-        co2 = co2[['HourDK', 'PriceArea', 'FuelAllocationMethod', 'CO2PerkWh']]
-        co2['HourDK'] = pd.to_datetime(co2['HourDK'])
-        co2 = co2[co2['PriceArea']==area]
-
-        my_bar.progress(20, text='Henter data fra eloverblik')
-        df = eloverblik_timeseries(cvr, str(fromdate))
-        st.dataframe(df)
-
-        samlet = df.merge(co2, how='left', left_on='from', right_on='HourDK')
-        samlet = samlet.rename(columns={'from':'datetime', 'amount': 'Mængde [kWh]'})
-
-        samlet['UdledningPrTime [kg]'] = samlet['Mængde [kWh]'] * (samlet['CO2PerkWh']/1000)
-
-        virksomhed = samlet.groupby('datetime').agg({'Mængde [kWh]':'sum', 'CO2PerkWh':'mean', 'UdledningPrTime [kg]':'sum'}).reset_index()
+        st.write(samlet.head())
 
         #samlet.to_excel('virksomhedsdata/' + cvr + ' målerniveau.xlsx', index=False)
         #virksomhed.to_excel('virksomhedsdata/' + cvr + ' hele firmaet.xlsx', index=False)
+
+        st.download_button(
+            label="Download data på målerniveau",
+            data=maler_excel,
+            file_name='large_df.csv',
+            mime='text/csv',
+        )
+
+        st.download_button(
+            label="Download data på virksomhedsniveau",
+            data=virksomhed_excel,
+            file_name='large_df.csv',
+            mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        )
 
     else:
         st.write('Goodbye')

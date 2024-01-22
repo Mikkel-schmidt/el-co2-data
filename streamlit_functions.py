@@ -58,6 +58,24 @@ def eloverblik_IDs(CVR):
 
 
 def eloverblik_timeseries(CVR, fromdate):
+    my_bar = st.progress(0, text='Henter CO2 data')
+    # DeclarationEmissionHour
+    response = requests.get(
+        url='https://api.energidataservice.dk/dataset/DeclarationGridEmission?start='+str(fromdate)+'T00:00&limit=400000')
+    result = response.json()
+
+    my_bar.progress(10, text='Henter CO2 data')
+    co2 = pd.json_normalize(result, 'records',
+            errors='ignore')
+
+    co2 = co2[co2['FuelAllocationMethod']=='125%']
+    co2 = co2[['HourDK', 'PriceArea', 'FuelAllocationMethod', 'CO2PerkWh']]
+    co2['HourDK'] = pd.to_datetime(co2['HourDK'])
+    co2 = co2[co2['PriceArea']==area]
+
+    my_bar.progress(20, text='Henter data fra eloverblik')
+
+
     access_token = get_token()
     test = test_datahub()
     if test != 'Ok':
@@ -69,7 +87,8 @@ def eloverblik_timeseries(CVR, fromdate):
     headers = {'Authorization': 'Bearer ' + access_token,
     'Accept': 'application/json',
     'Content-Type': 'application/json'}
-    for meter in tqdm(meters):
+    for meter in stqdm(meters):
+        my_bar.progress(20+(len(meters)/50), text='Henter data fra eloverblik')
         body = """{{"meteringPoints": {{
             "meteringPoint": ["{0}"]
         }}
@@ -107,7 +126,22 @@ def eloverblik_timeseries(CVR, fromdate):
         df_meter['from'] = pd.to_datetime(df_meter.To_date) + pd.to_timedelta(df_meter.hour-1, unit='h')
         df_meter = df_meter[['meter', 'amount',  'from', 'hour']]
         df = pd.concat([df, df_meter], ignore_index=True)
-    return df
+
+    my_bar.progress(70, text='Samler data')
+    samlet = df.merge(co2, how='left', left_on='from', right_on='HourDK')
+    samlet = samlet.rename(columns={'from':'datetime', 'amount': 'Mængde [kWh]'})
+
+    samlet['UdledningPrTime [kg]'] = samlet['Mængde [kWh]'] * (samlet['CO2PerkWh']/1000)
+    my_bar.progress(90, text='Laver filer')
+
+    virksomhed = samlet.groupby('datetime').agg({'Mængde [kWh]':'sum', 'CO2PerkWh':'mean', 'UdledningPrTime [kg]':'sum'}).reset_index()
+
+    maler_excel = samlet.to_excel('virksomhedsdata/' + CVR + ' målerniveau.xlsx', index=False)
+    virksomhed_excel = virksomhed.to_excel('virksomhedsdata/' + CVR + ' hele firmaet.xlsx', index=False)
+
+    my_bar.progress(100, text='Download filer er klar')
+
+    return samlet, maler_excel, virksomhed_excel
 
 
 
