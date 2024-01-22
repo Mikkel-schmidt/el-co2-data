@@ -4,7 +4,7 @@ import numpy as np
 from datetime import datetime
 
 #from streamlit_folium import st_folium
-from streamlit_functions import select_tree, getMeterPoints, getMeterReadings, check_password
+from streamlit_functions import check_password
 #from streamlit_tree_select import tree_select
 from streamlit_extras.app_logo import add_logo
 
