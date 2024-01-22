@@ -57,7 +57,7 @@ def eloverblik_IDs(CVR):
     return response.json()['result']
 
 
-def eloverblik_timeseries(CVR, fromdate):
+def eloverblik_timeseries(CVR, fromdate, area):
     my_bar = st.progress(0, text='Henter CO2 data')
     # DeclarationEmissionHour
     response = requests.get(

@@ -33,7 +33,7 @@ if check_password():
 
     if st.button('Hent data'):
         
-        samlet, maler_excel, virksomhed_excel = eloverblik_timeseries(cvr, str(fromdate))
+        samlet, maler_excel, virksomhed_excel = eloverblik_timeseries(cvr, str(fromdate), area)
 
 
         st.write(samlet.head())
