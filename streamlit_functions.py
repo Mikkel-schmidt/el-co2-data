@@ -69,7 +69,7 @@ def eloverblik_timeseries(CVR, fromdate):
     headers = {'Authorization': 'Bearer ' + access_token,
     'Accept': 'application/json',
     'Content-Type': 'application/json'}
-    for meter in stqdm(meters):
+    for meter in tqdm(meters):
         body = """{{"meteringPoints": {{
             "meteringPoint": ["{0}"]
         }}

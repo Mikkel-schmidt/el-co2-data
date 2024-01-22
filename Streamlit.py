@@ -28,8 +28,7 @@ if check_password():
     access_token = get_token()
 
     cvr = '10373816'
-    st.write(fromdate)
-    print(fromdate)
+
     
 
     if st.button('Hent data'):
@@ -54,7 +53,13 @@ if check_password():
 
         samlet = df.merge(co2, how='left', left_on='from', right_on='HourDK')
         samlet = samlet.rename(columns={'from':'datetime', 'amount': 'Mængde [kWh]'})
-        samlet.head()
+
+        samlet['UdledningPrTime [kg]'] = samlet['Mængde [kWh]'] * (samlet['CO2PerkWh']/1000)
+
+        virksomhed = samlet.groupby('datetime').agg({'Mængde [kWh]':'sum', 'CO2PerkWh':'mean', 'UdledningPrTime [kg]':'sum'}).reset_index()
+
+        #samlet.to_excel('virksomhedsdata/' + cvr + ' målerniveau.xlsx', index=False)
+        #virksomhed.to_excel('virksomhedsdata/' + cvr + ' hele firmaet.xlsx', index=False)
 
     else:
         st.write('Goodbye')
