@@ -35,7 +35,7 @@ if check_password():
         st.header('Henter CO2 data')
         # DeclarationEmissionHour
         response = requests.get(
-            url='https://api.energidataservice.dk/dataset/DeclarationGridEmission?start='+fromdate+'T00:00&limit=400000')
+            url='https://api.energidataservice.dk/dataset/DeclarationGridEmission?start='+str(fromdate)+'T00:00&limit=400000')
         result = response.json()
 
         co2 = pd.json_normalize(result, 'records',
