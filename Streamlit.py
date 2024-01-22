@@ -24,6 +24,11 @@ st.sidebar.image('https://via.ritzau.dk/data/images/00181/e7ddd001-aee3-4801-845
 if check_password():
     st.success('Login success')
 
+    if 'data_fetched' not in st.session_state:
+        st.session_state.data_fetched = False
+        st.session_state.samlet = pd.DataFrame()
+        st.session_state.virksomhed = pd.DataFrame()
+
     cvr = st.number_input('Input cvr', value=0)
     fromdate = st.date_input('Input first data')
     area = st.selectbox('Hvilket prisområde:', ('DK1', 'DK2'))
@@ -32,75 +37,39 @@ if check_password():
 
     cvr = '10373816'
 
-    if 'clicked' not in st.session_state:
-        st.session_state.clicked = False
+    if check_password():
+    st.success('Login success')
 
-    def click_button():
-        st.session_state.clicked = True
+    # Initialize session state variables
+    if 'data_fetched' not in st.session_state:
+        st.session_state.data_fetched = False
+        st.session_state.samlet = pd.DataFrame()
+        st.session_state.virksomhed = pd.DataFrame()
 
-    st.button('Hent data', type='primary', on_click=click_button)
+    cvr = st.number_input('Input cvr', value=0)  # Is this supposed to be hardcoded later?
+    fromdate = st.date_input('Input first data')
+    area = st.selectbox('Hvilket prisområde:', ('DK1', 'DK2'))
 
-    if st.session_state.clicked:
-        
-        samlet, virksomhed = eloverblik_timeseries(cvr, str(fromdate), area)
+    if st.button('Hent data'):
+        st.session_state.samlet, st.session_state.virksomhed = eloverblik_timeseries(cvr, str(fromdate), area)
+        st.session_state.data_fetched = True
 
+    if st.session_state.data_fetched:
+        st.write(st.session_state.samlet.head())
 
-        st.write(samlet.head())
-
-        #samlet.to_excel('virksomhedsdata/' + cvr + ' målerniveau.xlsx', index=False)
-        #virksomhed.to_excel('virksomhedsdata/' + cvr + ' hele firmaet.xlsx', index=False)
-
-        def to_excell(df):
-            output = BytesIO()
-            with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-                df.to_excel(writer, index=False, sheet_name='Sheet1')
-
-                workbook = writer.book
-                worksheet = writer.sheets['Sheet1']
-
-                # Table format options
-                table_format = {
-                    'columns': [{'header': column} for column in df.columns],
-                    'style': 'Table Style Medium 9',  # You can choose different styles
-                }
-
-                # Add the DataFrame as an Excel table
-                (max_row, max_col) = df.shape
-                column_settings = [{'header': column} for column in df.columns]
-                worksheet.add_table(0, 0, max_row, max_col - 1, {'columns': column_settings, 'style': 'Table Style Medium 9'})
-
-                # Auto-adjust columns' width
-                for i, col in enumerate(df.columns):
-                    # Find the maximum length of the data in the column
-                    column_len = max(df[col].astype(str).map(len).max(), len(col)) + 1
-                    worksheet.set_column(i, i, column_len)
-
-            processed_data = output.getvalue()
-            return processed_data
-        
-        df_xlsx_v = to_excell(virksomhed)
-        st.download_button(label='📥 Virksomhedsniveau',
-                                        data=df_xlsx_v ,
-                                        file_name= cvr + ' virksomhed.xlsx')
-        
-        df_xlsx_s = to_excell(samlet)
-        st.download_button(label='📥 Måler niveau',
-                                        data=df_xlsx_s ,
-                                        file_name= cvr + ' samlet.xlsx')
-
-        if not virksomhed.empty:
-            df_xlsx_v = to_excell(virksomhed)
+        if not st.session_state.virksomhed.empty:
+            df_xlsx_v = to_excell(st.session_state.virksomhed)
             st.download_button(label='📥 Virksomhedsniveau',
-                            data=df_xlsx_v,
-                            file_name=cvr + ' virksomhed.xlsx', 
-                            key='virksomheden')
+                               data=df_xlsx_v,
+                               file_name=f'{cvr} virksomhed.xlsx', 
+                               key='virksomheden')
 
-        if not samlet.empty:
-            df_xlsx_s = to_excell(samlet)
+        if not st.session_state.samlet.empty:
+            df_xlsx_s = to_excell(st.session_state.samlet)
             st.download_button(label='📥 Måler niveau',
-                            data=df_xlsx_s,
-                            file_name=cvr + ' samlet.xlsx', 
-                            key='samle')
+                               data=df_xlsx_s,
+                               file_name=f'{cvr} samlet.xlsx', 
+                               key='samle')
 
     
 
