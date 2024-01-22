@@ -24,7 +24,7 @@ st.sidebar.image('https://via.ritzau.dk/data/images/00181/e7ddd001-aee3-4801-845
 if check_password():
     st.success('Login success')
 
-    cvr = st.number_input('Input cvr', )
+    cvr = st.number_input('Input cvr', value=int)
     fromdate = st.date_input('Input first data')
     area = st.selectbox('Hvilket prisområde:', ('DK1', 'DK2'))
 
@@ -32,9 +32,15 @@ if check_password():
 
     cvr = '10373816'
 
-    
+    if 'clicked' not in st.session_state:
+        st.session_state.clicked = False
 
-    if st.button('Hent data'):
+    def click_button():
+        st.session_state.clicked = True
+
+    st.button('Hent data', type='primary', on_click=click_button)
+
+    if st.session_state.clicked:
         
         samlet, virksomhed = eloverblik_timeseries(cvr, str(fromdate), area)
 
@@ -86,13 +92,15 @@ if check_password():
             df_xlsx_v = to_excell(virksomhed)
             st.download_button(label='📥 Virksomhedsniveau',
                             data=df_xlsx_v,
-                            file_name=cvr + ' virksomhed.xlsx')
+                            file_name=cvr + ' virksomhed.xlsx', 
+                            key='virksomheden')
 
         if not samlet.empty:
             df_xlsx_s = to_excell(samlet)
             st.download_button(label='📥 Måler niveau',
                             data=df_xlsx_s,
-                            file_name=cvr + ' samlet.xlsx')
+                            file_name=cvr + ' samlet.xlsx', 
+                            key='samle')
 
     
 
