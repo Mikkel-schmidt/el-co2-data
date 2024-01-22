@@ -27,8 +27,13 @@ if check_password():
     access_token = get_token()
 
     cvr = '10373816'
-    df = eloverblik_timeseries(cvr, '2023-01-01')
-    st.dataframe(df)
+
+    if st.button('Hent data'):
+        df = eloverblik_timeseries(cvr, '2023-01-01')
+        st.dataframe(df)
+    else:
+        st.write('Goodbye')
+    
 
 
 
