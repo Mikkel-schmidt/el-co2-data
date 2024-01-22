@@ -48,23 +48,39 @@ if check_password():
             output = BytesIO()
             with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
                 df.to_excel(writer, index=False, sheet_name='Sheet1')
+
                 workbook = writer.book
                 worksheet = writer.sheets['Sheet1']
-                format1 = workbook.add_format({'num_format': '0.00'}) 
-                worksheet.set_column('A:A', None, format1)
-            
+
+                # Table format options
+                table_format = {
+                    'columns': [{'header': column} for column in df.columns],
+                    'style': 'Table Style Medium 9',  # You can choose different styles
+                }
+
+                # Add the DataFrame as an Excel table
+                (max_row, max_col) = df.shape
+                column_settings = [{'header': column} for column in df.columns]
+                worksheet.add_table(0, 0, max_row, max_col - 1, {'columns': column_settings, 'style': 'Table Style Medium 9'})
+
+                # Auto-adjust columns' width
+                for i, col in enumerate(df.columns):
+                    # Find the maximum length of the data in the column
+                    column_len = max(df[col].astype(str).map(len).max(), len(col)) + 1
+                    worksheet.set_column(i, i, column_len)
+
             processed_data = output.getvalue()
             return processed_data
         
         df_xlsx = to_excell(samlet)
         st.download_button(label='📥 Måler niveau',
                                         data=df_xlsx ,
-                                        file_name= 'samlet.xlsx')
+                                        file_name= cvr + ' samlet.xlsx')
 
         df_xlsx = to_excell(virksomhed)
         st.download_button(label='📥 Virksomhedsniveau',
                                         data=df_xlsx ,
-                                        file_name= 'virksomhed.xlsx')
+                                        file_name= cvr + ' virksomhed.xlsx')
         
 
     else:
