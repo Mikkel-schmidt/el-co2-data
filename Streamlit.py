@@ -45,7 +45,7 @@ if check_password():
             label="Download data på målerniveau",
             data=maler_excel,
             file_name='large_df.csv',
-            mime='text/csv',
+            mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         )
 
         st.download_button(
