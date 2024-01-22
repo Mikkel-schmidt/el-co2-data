@@ -24,7 +24,7 @@ st.sidebar.image('https://via.ritzau.dk/data/images/00181/e7ddd001-aee3-4801-845
 if check_password():
     st.success('Login success')
 
-    cvr = st.number_input('Input cvr', value=int)
+    cvr = st.number_input('Input cvr', value=0)
     fromdate = st.date_input('Input first data')
     area = st.selectbox('Hvilket prisområde:', ('DK1', 'DK2'))
 
