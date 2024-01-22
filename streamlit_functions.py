@@ -64,7 +64,7 @@ def eloverblik_timeseries(CVR, fromdate, area):
         url='https://api.energidataservice.dk/dataset/DeclarationGridEmission?start='+str(fromdate)+'T00:00&limit=400000')
     result = response.json()
 
-    my_bar.progress(10, text='Henter CO2 data')
+    my_bar.progress(0.10, text='Henter CO2 data')
     co2 = pd.json_normalize(result, 'records',
             errors='ignore')
 
@@ -73,7 +73,7 @@ def eloverblik_timeseries(CVR, fromdate, area):
     co2['HourDK'] = pd.to_datetime(co2['HourDK'])
     co2 = co2[co2['PriceArea']==area]
 
-    my_bar.progress(20, text='Henter data fra eloverblik')
+    my_bar.progress(0.20, text='Henter data fra eloverblik')
 
 
     access_token = get_token()
@@ -88,7 +88,7 @@ def eloverblik_timeseries(CVR, fromdate, area):
     'Accept': 'application/json',
     'Content-Type': 'application/json'}
     for meter in stqdm(meters):
-        my_bar.progress(20+(len(meters)/50), text='Henter data fra eloverblik')
+        my_bar.progress(0.20+(len(meters)/0.50), text='Henter data fra eloverblik')
         body = """{{"meteringPoints": {{
             "meteringPoint": ["{0}"]
         }}
@@ -127,19 +127,19 @@ def eloverblik_timeseries(CVR, fromdate, area):
         df_meter = df_meter[['meter', 'amount',  'from', 'hour']]
         df = pd.concat([df, df_meter], ignore_index=True)
 
-    my_bar.progress(70, text='Samler data')
+    my_bar.progress(0.70, text='Samler data')
     samlet = df.merge(co2, how='left', left_on='from', right_on='HourDK')
     samlet = samlet.rename(columns={'from':'datetime', 'amount': 'Mængde [kWh]'})
 
     samlet['UdledningPrTime [kg]'] = samlet['Mængde [kWh]'] * (samlet['CO2PerkWh']/1000)
-    my_bar.progress(90, text='Laver filer')
+    my_bar.progress(0.90, text='Laver filer')
 
     virksomhed = samlet.groupby('datetime').agg({'Mængde [kWh]':'sum', 'CO2PerkWh':'mean', 'UdledningPrTime [kg]':'sum'}).reset_index()
 
     maler_excel = samlet.to_excel('virksomhedsdata/' + CVR + ' målerniveau.xlsx', index=False)
     virksomhed_excel = virksomhed.to_excel('virksomhedsdata/' + CVR + ' hele firmaet.xlsx', index=False)
 
-    my_bar.progress(100, text='Download filer er klar')
+    my_bar.progress(1.00, text='Download filer er klar')
 
     return samlet, maler_excel, virksomhed_excel
 
