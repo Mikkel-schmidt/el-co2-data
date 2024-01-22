@@ -28,6 +28,7 @@ if check_password():
 
     cvr = '10373816'
     df = eloverblik_timeseries(cvr, '2023-01-01')
+    st.dataframe(df)
 
 
 
