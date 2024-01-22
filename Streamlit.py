@@ -82,14 +82,17 @@ if check_password():
                                         data=df_xlsx_s ,
                                         file_name= cvr + ' samlet.xlsx')
 
-    if df_xlsx_v:
+    if not virksomhed.empty:
+        df_xlsx_v = to_excell(virksomhed)
         st.download_button(label='📥 Virksomhedsniveau',
-                                        data=df_xlsx_v ,
-                                        file_name= cvr + ' virksomhed.xlsx')
-    if df_xlsx_s:
+                           data=df_xlsx_v,
+                           file_name=cvr + ' virksomhed.xlsx')
+
+    if not samlet.empty:
+        df_xlsx_s = to_excell(samlet)
         st.download_button(label='📥 Måler niveau',
-                                        data=df_xlsx_s ,
-                                        file_name= cvr + ' samlet.xlsx')
+                           data=df_xlsx_s,
+                           file_name=cvr + ' samlet.xlsx')
 
     
 
