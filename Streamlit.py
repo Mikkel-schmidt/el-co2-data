@@ -39,6 +39,7 @@ if check_password():
             url='https://api.energidataservice.dk/dataset/DeclarationGridEmission?start='+str(fromdate)+'T00:00&limit=400000')
         result = response.json()
 
+        my_bar.progress(10, text='Henter CO2 data')
         co2 = pd.json_normalize(result, 'records',
                 errors='ignore')
 
@@ -47,7 +48,7 @@ if check_password():
         co2['HourDK'] = pd.to_datetime(co2['HourDK'])
         co2 = co2[co2['PriceArea']==area]
 
-        my_bar.progress(20, text='Henter eldata fra eloverblik')
+        my_bar.progress(20, text='Henter data fra eloverblik')
         df = eloverblik_timeseries(cvr, str(fromdate))
         st.dataframe(df)
     else:
