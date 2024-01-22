@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import requests
 
 #from streamlit_folium import st_folium
 from streamlit_functions import get_token, test_datahub, eloverblik_IDs, eloverblik_timeseries, check_password
@@ -27,9 +28,27 @@ if check_password():
     access_token = get_token()
 
     cvr = '10373816'
+    st.write(fromdate)
+    
 
     if st.button('Hent data'):
-        df = eloverblik_timeseries(cvr, '2023-01-01')
+        st.header('Henter CO2 data')
+        # DeclarationEmissionHour
+        response = requests.get(
+            url='https://api.energidataservice.dk/dataset/DeclarationGridEmission?start='+fromdate+'T00:00&limit=400000')
+        result = response.json()
+
+        co2 = pd.json_normalize(result, 'records',
+                errors='ignore')
+
+        co2 = co2[co2['FuelAllocationMethod']=='125%']
+        co2 = co2[['HourDK', 'PriceArea', 'FuelAllocationMethod', 'CO2PerkWh']]
+        co2['HourDK'] = pd.to_datetime(co2['HourDK'])
+        co2 = co2[co2['PriceArea']==area]
+
+
+        st.header('Henter eldata fra eloverblik')
+        df = eloverblik_timeseries(cvr, fromdate)
         st.dataframe(df)
     else:
         st.write('Goodbye')
