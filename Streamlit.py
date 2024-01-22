@@ -29,10 +29,11 @@ if check_password():
 
     cvr = '10373816'
     st.write(fromdate)
+    print(fromdate)
     
 
     if st.button('Hent data'):
-        st.header('Henter CO2 data')
+        my_bar = st.progress(0, text='Henter CO2 data')
         # DeclarationEmissionHour
         response = requests.get(
             url='https://api.energidataservice.dk/dataset/DeclarationGridEmission?start='+str(fromdate)+'T00:00&limit=400000')
@@ -46,8 +47,7 @@ if check_password():
         co2['HourDK'] = pd.to_datetime(co2['HourDK'])
         co2 = co2[co2['PriceArea']==area]
 
-
-        st.header('Henter eldata fra eloverblik')
+        my_bar.progress(20, text='Henter eldata fra eloverblik')
         df = eloverblik_timeseries(cvr, fromdate)
         st.dataframe(df)
     else:
