@@ -48,7 +48,7 @@ if check_password():
         co2 = co2[co2['PriceArea']==area]
 
         my_bar.progress(20, text='Henter eldata fra eloverblik')
-        df = eloverblik_timeseries(cvr, fromdate)
+        df = eloverblik_timeseries(cvr, str(fromdate))
         st.dataframe(df)
     else:
         st.write('Goodbye')

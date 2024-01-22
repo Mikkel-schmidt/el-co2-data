@@ -65,7 +65,7 @@ def eloverblik_timeseries(CVR, fromdate):
     meters = eloverblik_IDs(CVR)
     #meters = IDs
     df = pd.DataFrame(columns=['meter', 'amount',  'from', 'hour'])   
-    url = 'https://api.eloverblik.dk/thirdpartyapi/api/meterdata/gettimeseries/' + fromdate + '/2023-10-31/Hour'
+    url = 'https://api.eloverblik.dk/thirdpartyapi/api/meterdata/gettimeseries/' + str(fromdate) + '/2023-10-31/Hour'
     headers = {'Authorization': 'Bearer ' + access_token,
     'Accept': 'application/json',
     'Content-Type': 'application/json'}
