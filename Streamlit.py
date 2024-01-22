@@ -3,6 +3,9 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 import requests
+from io import BytesIO
+from pyxlsb import open_workbook as open_xlsb
+
 
 #from streamlit_folium import st_folium
 from streamlit_functions import get_token, test_datahub, eloverblik_IDs, eloverblik_timeseries, check_password
@@ -33,7 +36,7 @@ if check_password():
 
     if st.button('Hent data'):
         
-        samlet, maler_excel, virksomhed_excel = eloverblik_timeseries(cvr, str(fromdate), area)
+        samlet, virksomhed = eloverblik_timeseries(cvr, str(fromdate), area)
 
 
         st.write(samlet.head())
@@ -41,19 +44,28 @@ if check_password():
         #samlet.to_excel('virksomhedsdata/' + cvr + ' målerniveau.xlsx', index=False)
         #virksomhed.to_excel('virksomhedsdata/' + cvr + ' hele firmaet.xlsx', index=False)
 
-        st.download_button(
-            label="Download data på målerniveau",
-            data=maler_excel,
-            file_name='large_df.xlsx',
-            mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        )
+        def to_excell(df):
+            output = BytesIO()
+            writer = pd.ExcelWriter(output, engine='xlsxwriter')
+            df.to_excel(writer, index=False, sheet_name='Sheet1')
+            workbook = writer.book
+            worksheet = writer.sheets['Sheet1']
+            format1 = workbook.add_format({'num_format': '0.00'}) 
+            worksheet.set_column('A:A', None, format1)  
+            writer.save()
+            processed_data = output.getvalue()
+            return processed_data
+        
+        df_xlsx = to_excell(samlet)
+        st.download_button(label='📥 Måler niveau',
+                                        data=df_xlsx ,
+                                        file_name= 'samlet.xlsx')
 
-        st.download_button(
-            label="Download data på virksomhedsniveau",
-            data=virksomhed_excel,
-            file_name='large_df.xlsx',
-            mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        )
+        df_xlsx = to_excell(virksomhed)
+        st.download_button(label='📥 Virksomhedsniveau',
+                                        data=df_xlsx ,
+                                        file_name= 'virksomhed.xlsx')
+        
 
     else:
         st.write('Goodbye')
