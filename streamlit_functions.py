@@ -136,8 +136,8 @@ def eloverblik_timeseries(CVR, fromdate, area):
 
     virksomhed = samlet.groupby('datetime').agg({'Mængde [kWh]':'sum', 'CO2PerkWh':'mean', 'UdledningPrTime [kg]':'sum'}).reset_index()
 
-    maler_excel = samlet.to_excel('virksomhedsdata/' + CVR + ' målerniveau.xlsx', index=False)
-    virksomhed_excel = virksomhed.to_excel('virksomhedsdata/' + CVR + ' hele firmaet.xlsx', index=False)
+    maler_excel = samlet.to_excel(CVR + ' målerniveau.xlsx', index=False)
+    virksomhed_excel = virksomhed.to_excel(CVR + ' hele firmaet.xlsx', index=False)
 
     my_bar.progress(1.00, text='Download filer er klar')
 
