@@ -20,4 +20,4 @@ st.sidebar.image('https://via.ritzau.dk/data/images/00181/e7ddd001-aee3-4801-845
 st.write('Hello World')
 
 if check_password():
-    col1.success('Login success')
+    st.success('Login success')
