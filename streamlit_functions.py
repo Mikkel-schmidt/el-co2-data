@@ -88,7 +88,7 @@ def eloverblik_timeseries(CVR, fromdate, area):
     'Accept': 'application/json',
     'Content-Type': 'application/json'}
     for meter in stqdm(meters):
-        my_bar.progress(0.20+(len(meters)/0.50), text='Henter data fra eloverblik')
+        my_bar.progress(0.20+(0.5/len(meters)), text='Henter data fra eloverblik')
         body = """{{"meteringPoints": {{
             "meteringPoint": ["{0}"]
         }}
