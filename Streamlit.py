@@ -51,6 +51,11 @@ if check_password():
         my_bar.progress(20, text='Henter data fra eloverblik')
         df = eloverblik_timeseries(cvr, str(fromdate))
         st.dataframe(df)
+
+        samlet = df.merge(co2, how='left', left_on='from', right_on='HourDK')
+        samlet = samlet.rename(columns={'from':'datetime', 'amount': 'Mængde [kWh]'})
+        samlet.head()
+
     else:
         st.write('Goodbye')
     
