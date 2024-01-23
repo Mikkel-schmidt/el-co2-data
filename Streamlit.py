@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import requests
 from io import BytesIO
 from pyxlsb import open_workbook as open_xlsb
@@ -62,7 +62,7 @@ if check_password():
         st.session_state.virksomhed = pd.DataFrame()
 
     cvr = st.number_input('Input cvr', value=1000000)  #10373816
-    fromdate = st.date_input('Input first data', value=datetime.today() - timedelta(days=14), min_value=datetime.date(2022, 1, 1), max_value=datetime.today() - timedelta(days=13))
+    fromdate = st.date_input('Input first data', value=datetime.today() - timedelta(days=14), min_value=date(2022, 1, 1), max_value=datetime.today() - timedelta(days=13))
     area = st.selectbox('Hvilket prisområde:', ('DK1', 'DK2'))
 
     if st.button('Hent data'):
