@@ -83,3 +83,8 @@ if check_password():
             st.download_button(label='📥 Måler niveau',
                                data=df_xlsx_s,
                                file_name=f'{cvr} samlet.xlsx')
+            
+            c1, c2, c3 = st.columns(3)
+            c1.metric(label="Total udledning", value=virksomhed['UdledningPrTime [kg]'].sum())
+            c2.metric(label="Total forbrug", value=virksomhed['Mængde [kWh]'].sum())
+            c3.metric(label="Antal målere", value=samlet['meter'].nunique())
