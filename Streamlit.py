@@ -8,7 +8,7 @@ from pyxlsb import open_workbook as open_xlsb
 
 
 #from streamlit_folium import st_folium
-from streamlit_functions import get_token, test_datahub, eloverblik_IDs, eloverblik_timeseries, check_password
+from streamlit_functions import get_token, test_datahub, eloverblik_IDs, eloverblik_timeseries, check_password, authorizations
 #from streamlit_tree_select import tree_select
 from streamlit_extras.app_logo import add_logo
 
@@ -64,6 +64,9 @@ if check_password():
     cvr = st.number_input('Input cvr', value=1000000)  #10373816
     fromdate = st.date_input('Input first data', value=datetime.today() - timedelta(days=14), min_value=date(2022, 1, 1), max_value=datetime.today() - timedelta(days=13))
     area = st.selectbox('Hvilket prisområde:', ('DK1', 'DK2'))
+
+    auth = authorizations()
+    st.write(auth.head())
 
     if st.button('Hent data'):
         st.session_state.samlet, st.session_state.virksomhed = eloverblik_timeseries(str(cvr), str(fromdate), area)

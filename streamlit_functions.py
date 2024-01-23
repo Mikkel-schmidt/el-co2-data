@@ -56,6 +56,20 @@ def eloverblik_IDs(CVR):
     response = requests.get(url, headers=headers)
     return response.json()['result']
 
+def authorizations(CVR):
+    access_token = get_token()
+    url = 'https://api.eloverblik.dk/thirdpartyapi/api/authorization/authorization'
+
+    headers = {'Authorization': 'Bearer ' + access_token,
+        'Accept': 'application/json'}
+
+    response = requests.get(url, headers=headers)
+
+    df = pd.json_normalize(response.json(), 'result',
+            errors='ignore')
+    
+    return df
+
 
 def eloverblik_timeseries(CVR, fromdate, area):
     my_bar = st.progress(0, text='Henter CO2 data')
@@ -179,4 +193,3 @@ def check_password():
     else:
         # Password correct.
         return True
-        
