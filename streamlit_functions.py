@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 from datetime import timedelta
 import requests
-from time import time
+import time
 from tqdm import tqdm
 from stqdm import stqdm
 
@@ -38,11 +38,11 @@ def test_datahub():
     response = requests.get(url)
     i = 0
     while response.status_code != 200:
-        print('Datahub Down')
+        st.write('Datahub Down, waiting 1 minute')
         time.sleep(60)
         i += 1
         if i > 10:
-            print('Datahub Down for 10 min')
+            st.write('Datahub Down for 10 min')
             break
     return 'Ok'
 
