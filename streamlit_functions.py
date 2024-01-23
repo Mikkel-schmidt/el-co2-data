@@ -71,11 +71,11 @@ def authorizations():
     return df
 
 
-def eloverblik_timeseries(CVR, fromdate, area):
+def eloverblik_timeseries(CVR, fromdate, todate, area):
     my_bar = st.progress(0.05, text='Henter CO2 data')
     # DeclarationEmissionHour
     response = requests.get(
-        url='https://api.energidataservice.dk/dataset/DeclarationGridEmission?start='+str(fromdate)+'T00:00&limit=400000')
+        url='https://api.energidataservice.dk/dataset/DeclarationGridEmission?start='+str(fromdate)+'T00:00&end='+str(todate)+'T00:00&limit=400000')
     result = response.json()
 
     my_bar.progress(0.10, text='Henter CO2 data')
