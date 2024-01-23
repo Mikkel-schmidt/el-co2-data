@@ -69,8 +69,8 @@ if check_password():
 
     cvr = st.number_input('Input cvr', value=1000000)  #10373816
     c1, c2 = st.columns(2)
-    fromdate = c1.date_input('Fra dato', value=datetime.today() - timedelta(days=60), min_value=date(2022, 1, 1), max_value=datetime.today() - timedelta(days=13))
-    todate = c2.date_input('Til dato', value=datetime.today() - timedelta(days=14), min_value=date(2022, 1, 1), max_value=datetime.today() - timedelta(days=13))
+    fromdate = c1.date_input('Fra dato', value=date(2023, 1, 1), min_value=date(2022, 1, 1), max_value=datetime.today() - timedelta(days=13))
+    todate = c2.date_input('Til dato', value=date(2023, 12, 31), min_value=date(2022, 1, 1), max_value=datetime.today() - timedelta(days=13))
     area = st.selectbox('Hvilket prisområde:', ('DK1', 'DK2'))
 
 
