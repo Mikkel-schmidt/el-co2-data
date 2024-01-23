@@ -63,6 +63,7 @@ if check_password():
 
     with st.expander("Se kundedata"):
         auth = authorizations()
+        st.write(auth.head())
         st.write(auth[['customerName', 'customerKey', 'customerCVR']].drop_duplicates())
 
 
