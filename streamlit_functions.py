@@ -68,7 +68,7 @@ def authorizations():
     df = pd.json_normalize(response.json(), 'result',
             errors='ignore')
     
-    return df
+    return response
 
 
 def eloverblik_timeseries(CVR, fromdate, area):
