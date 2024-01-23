@@ -92,10 +92,11 @@ if check_password():
                                data=df_xlsx_v,
                                file_name=f'{cvr} virksomhed.xlsx')
 
-        if not st.session_state.samlet.empty:
-            df_xlsx_s = to_excell(st.session_state.samlet)
-            st.download_button(label='📥 Måler niveau',
-                               data=df_xlsx_s,
-                               file_name=f'{cvr} samlet.xlsx')
+        with st.spinner('Henter målerniveau'):
+            if not st.session_state.samlet.empty:
+                df_xlsx_s = to_excell(st.session_state.samlet)
+                st.download_button(label='📥 Måler niveau',
+                                data=df_xlsx_s,
+                                file_name=f'{cvr} samlet.xlsx')
             
             
