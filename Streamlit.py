@@ -86,11 +86,12 @@ if check_password():
         c3.metric(label="Antal målere", value=st.session_state.samlet['meter'].nunique())
         c3.metric(label="Gns. udledning pr kWh [g]", value=st.session_state.samlet['CO2PerkWh'].mean().round())
 
-        if not st.session_state.virksomhed.empty:
-            df_xlsx_v = to_excell(st.session_state.virksomhed)
-            st.download_button(label='📥 Virksomhedsniveau',
-                               data=df_xlsx_v,
-                               file_name=f'{cvr} virksomhed.xlsx')
+        with st.spinner('Henter virksomhedsniveau'):
+            if not st.session_state.virksomhed.empty:
+                df_xlsx_v = to_excell(st.session_state.virksomhed)
+                st.download_button(label='📥 Virksomhedsniveau',
+                                data=df_xlsx_v,
+                                file_name=f'{cvr} virksomhed.xlsx')
 
         with st.spinner('Henter målerniveau'):
             if not st.session_state.samlet.empty:
