@@ -62,12 +62,15 @@ def authorizations():
 
     headers = {'Authorization': 'Bearer ' + access_token,
         'Accept': 'application/json'}
-
+    
     response = requests.get(url, headers=headers)
 
-    df = pd.json_normalize(response.json(), 'result',
+    try:
+        df = pd.json_normalize(response.json(), 'result',
             errors='ignore')
-    
+    except:
+        print('Error')
+
     return df
 
 
