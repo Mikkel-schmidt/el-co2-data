@@ -64,8 +64,7 @@ if check_password():
     with st.expander("Se kundedata"):
         auth = authorizations()
         auth['timeStamp'] = pd.to_datetime(auth['timeStamp'])
-        st.write(auth.head())
-        st.write(auth.sort_values('timeStamp')[['customerName', 'customerKey', 'customerCVR']].drop_duplicates())
+        st.write(auth.sort_values('timeStamp')[['customerName', 'customerKey', 'customerCVR', 'timeStamp']].drop_duplicates())
 
 
     cvr = st.number_input('Input cvr', value=1000000)  #10373816
