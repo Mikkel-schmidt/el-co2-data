@@ -71,6 +71,10 @@ if check_password():
 
     if st.session_state.data_fetched:
         st.write(st.session_state.samlet.head())
+        c1, c2, c3 = st.columns(3)
+        c1.metric(label="Total udledning", value=st.session_state.virksomhed['UdledningPrTime [kg]'].sum())
+        c2.metric(label="Total forbrug", value=st.session_state.virksomhed['Mængde [kWh]'].sum())
+        c3.metric(label="Antal målere", value=st.session_state.samlet['meter'].nunique())
 
         if not st.session_state.virksomhed.empty:
             df_xlsx_v = to_excell(st.session_state.virksomhed)
@@ -84,7 +88,4 @@ if check_password():
                                data=df_xlsx_s,
                                file_name=f'{cvr} samlet.xlsx')
             
-            c1, c2, c3 = st.columns(3)
-            c1.metric(label="Total udledning", value=virksomhed['UdledningPrTime [kg]'].sum())
-            c2.metric(label="Total forbrug", value=virksomhed['Mængde [kWh]'].sum())
-            c3.metric(label="Antal målere", value=samlet['meter'].nunique())
+            
