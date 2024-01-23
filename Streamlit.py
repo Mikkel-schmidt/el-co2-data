@@ -62,7 +62,7 @@ if check_password():
         st.session_state.virksomhed = pd.DataFrame()
 
     cvr = st.number_input('Input cvr', value=1000000)  #10373816
-    fromdate = st.date_input('Input first data', value=datetime.today() - timedelta(days=14), max_value=datetime.today() - timedelta(days=13))
+    fromdate = st.date_input('Input first data', value=datetime.today() - timedelta(days=14), min_value='2023-01-01', max_value=datetime.today() - timedelta(days=13))
     area = st.selectbox('Hvilket prisområde:', ('DK1', 'DK2'))
 
     if st.button('Hent data'):
