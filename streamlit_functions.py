@@ -65,8 +65,8 @@ def authorizations():
 
     response = requests.get(url, headers=headers)
 
-    df = pd.json_normalize(response.json(), 'result',
-            errors='ignore')
+    # df = pd.json_normalize(response.json(), 'result',
+    #         errors='ignore')
     
     return response
 
