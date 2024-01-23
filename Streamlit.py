@@ -61,7 +61,7 @@ if check_password():
         st.session_state.samlet = pd.DataFrame()
         st.session_state.virksomhed = pd.DataFrame()
 
-    with st.expander("Se kundedata"):
+    with st.expander("Se kunder"):
         auth = authorizations()
         auth['timeStamp'] = pd.to_datetime(auth['timeStamp'])
         st.write(auth.sort_values('timeStamp', ascending=False)[['customerName', 'customerKey', 'customerCVR']].drop_duplicates())
