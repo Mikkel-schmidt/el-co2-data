@@ -72,10 +72,10 @@ if check_password():
     if st.session_state.data_fetched:
         st.write(st.session_state.samlet.head())
         c1, c2, c3 = st.columns(3)
-        c1.metric(label="Total udledning [kg]", value=st.session_state.virksomhed['UdledningPrTime [kg]'].sum())
-        c1.metric(label=" Gns. Udledning pr time [kg]", value=st.session_state.virksomhed['UdledningPrTime [kg]'].mean())
-        c2.metric(label="Total forbrug [kWh]", value=st.session_state.virksomhed['Mængde [kWh]'].sum())
-        c2.metric(label="Gns. forbrug pr time [kWh]", value=st.session_state.virksomhed['Mængde [kWh]'].mean())
+        c1.metric(label="Total udledning [kg]", value=st.session_state.virksomhed['UdledningPrTime [kg]'].sum().round)
+        c1.metric(label=" Gns. Udledning pr time [kg]", value=st.session_state.virksomhed['UdledningPrTime [kg]'].mean().round())
+        c2.metric(label="Total forbrug [kWh]", value=st.session_state.virksomhed['Mængde [kWh]'].sum().round())
+        c2.metric(label="Gns. forbrug pr time [kWh]", value=st.session_state.virksomhed['Mængde [kWh]'].mean().round())
         c3.metric(label="Antal målere", value=st.session_state.samlet['meter'].nunique())
 
         if not st.session_state.virksomhed.empty:
