@@ -77,7 +77,7 @@ if check_password():
         c2.metric(label="Total forbrug [kWh]", value=st.session_state.virksomhed['Mængde [kWh]'].sum().round())
         c2.metric(label="Gns. forbrug pr time [kWh]", value=st.session_state.virksomhed['Mængde [kWh]'].mean().round())
         c3.metric(label="Antal målere", value=st.session_state.samlet['meter'].nunique())
-        c3.metric(label="Gns. udledning pr kWh", value=st.session_state.samlet['CO2PerkWh'].mean())
+        c3.metric(label="Gns. udledning pr kWh", value=st.session_state.samlet['CO2PerkWh'].mean().round())
 
         if not st.session_state.virksomhed.empty:
             df_xlsx_v = to_excell(st.session_state.virksomhed)
