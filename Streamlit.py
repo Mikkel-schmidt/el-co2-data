@@ -78,7 +78,7 @@ if check_password():
 
     if st.session_state.data_fetched:
         with st.expander('Se data:'):
-            st.write(st.session_state.samlet.head())v
+            st.write(st.session_state.samlet.head())
 
         c1, c2, c3 = st.columns(3)
         c1.metric(label="Total udledning [kg]", value=st.session_state.virksomhed['UdledningPrTime [kg]'].sum().round())
