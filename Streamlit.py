@@ -63,7 +63,7 @@ if check_password():
 
     with st.expander("Se kundedata"):
         auth = authorizations()
-        st.write(auth[['customerName', 'customerKey', 'customerCVR', 'timestamp']].drop_duplicates())
+        st.write(auth[['customerName', 'customerKey', 'customerCVR']].drop_duplicates())
 
 
     cvr = st.number_input('Input cvr', value=1000000)  #10373816
