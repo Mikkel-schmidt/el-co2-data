@@ -66,7 +66,7 @@ if check_password():
     area = st.selectbox('Hvilket prisområde:', ('DK1', 'DK2'))
 
     auth = authorizations()
-    st.write(auth.json())
+    st.write(auth.head())
 
     if st.button('Hent data'):
         st.session_state.samlet, st.session_state.virksomhed = eloverblik_timeseries(str(cvr), str(fromdate), area)
