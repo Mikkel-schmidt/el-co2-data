@@ -61,12 +61,16 @@ if check_password():
         st.session_state.samlet = pd.DataFrame()
         st.session_state.virksomhed = pd.DataFrame()
 
+    with st.expander("Se kundedata"):
+        auth = authorizations()
+        st.write(auth[['customerName', 'customerKey', 'customerCVR', 'timestamp']].drop_duplicates())
+
+
     cvr = st.number_input('Input cvr', value=1000000)  #10373816
     fromdate = st.date_input('Input first data', value=datetime.today() - timedelta(days=14), min_value=date(2022, 1, 1), max_value=datetime.today() - timedelta(days=13))
     area = st.selectbox('Hvilket prisområde:', ('DK1', 'DK2'))
 
-    auth = authorizations()
-    st.write(auth.head())
+
 
     if st.button('Hent data'):
         st.session_state.samlet, st.session_state.virksomhed = eloverblik_timeseries(str(cvr), str(fromdate), area)
