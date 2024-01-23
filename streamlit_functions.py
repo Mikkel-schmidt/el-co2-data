@@ -58,7 +58,7 @@ def eloverblik_IDs(CVR):
 
 def authorizations():
     access_token = get_token()
-    url = 'https://api.eloverblik.dk/thirdpartyapi/api/authorization/authorization'
+    url = 'https://api.eloverblik.dk/thirdpartyapi/api/authorization/authorizations'
 
     headers = {'Authorization': 'Bearer ' + access_token,
         'Accept': 'application/json'}
