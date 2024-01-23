@@ -53,6 +53,8 @@ def to_excell(df):
 if check_password():
     st.success('Login success')
 
+    st.write('Hvis du skal give kunden et link til at give adgang til tredjepartsdata skal du bruge følgende link: [Eloverblik fuldmagt](https://eloverblik.dk/authorization/authorization?thirdPartyId=3AB602AD-78B1-4E02-8E16-E326420403D8&fromDate=2020-01-23&toDate=2027-01-23&customerKey=El-co2&returnUrl=nrgi.dk%2Ferhverv)')
+
     # Initialize session state variables
     if 'data_fetched' not in st.session_state:
         st.session_state.data_fetched = False
