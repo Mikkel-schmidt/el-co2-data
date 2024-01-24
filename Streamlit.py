@@ -105,10 +105,10 @@ if check_password():
                                 data=st.session_state.df_xlsx_s,
                                 file_name=f'{cvr} samlet.xlsx')
                 
-        with st.spinner('Henter produktionsdata'):
-            st.session_state.prod = el_production(st.session_state.virksomhed, fromdate, todate, area)
-            st.write(st.session_state.prod.head())
-            st.write(st.session_state.prod.mean(axis=0))
+        # with st.spinner('Henter produktionsdata'):
+        #     st.session_state.prod = el_production(st.session_state.virksomhed, fromdate, todate, area)
+        #     st.write(st.session_state.prod.head())
+        #     st.write(st.session_state.prod.mean(axis=0))
 
         
             
