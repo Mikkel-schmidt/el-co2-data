@@ -108,5 +108,8 @@ if check_password():
         with st.spinner('Henter produktionsdata'):
             st.session_state.prod = el_production(st.session_state.virksomhed, fromdate, todate, area)
             st.write(st.session_state.prod.head())
+            st.write(st.session_state.prod.mean(axis=0))
+
+        
             
             

@@ -179,7 +179,10 @@ def el_production(df, fromdate, todate, area):
     prod = prod[prod['PriceArea']==area]
 
     piv = prod.pivot_table(index=['HourDK', 'PriceArea'], columns='ReportGrp', values='percent').reset_index().fillna(0)
+    st.write(piv)
+    st.write(df)
     dff = df.merge(piv, how='left', on='HourDK')
+
 
     return dff
 
