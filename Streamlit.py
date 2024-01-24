@@ -93,20 +93,20 @@ if check_password():
 
         with st.spinner('Henter virksomhedsniveau'):
             if not st.session_state.virksomhed.empty:
-                df_xlsx_v = to_excell(st.session_state.virksomhed)
+                st.session_state.df_xlsx_v = to_excell(st.session_state.virksomhed)
                 st.download_button(label='📥 Virksomhedsniveau',
-                                data=df_xlsx_v,
+                                data=st.session_state.df_xlsx_v,
                                 file_name=f'{cvr} virksomhed.xlsx')
 
         with st.spinner('Henter målerniveau'):
             if not st.session_state.samlet.empty:
-                df_xlsx_s = to_excell(st.session_state.samlet)
+                st.session_state.df_xlsx_s = to_excell(st.session_state.samlet)
                 st.download_button(label='📥 Måler niveau',
-                                data=df_xlsx_s,
+                                data=st.session_state.df_xlsx_s,
                                 file_name=f'{cvr} samlet.xlsx')
                 
         with st.spinner('Henter produktionsdata'):
-            st.session_state.prod = el_production(st.session_state.virksomhed)
+            st.session_state.prod = el_production(st.session_state.virksomhed, fromdate, todate, area)
             st.write(st.session_state.prod.head())
             
             

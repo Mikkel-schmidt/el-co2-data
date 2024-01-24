@@ -101,7 +101,7 @@ def eloverblik_timeseries(CVR, fromdate, todate, area):
     my_bar.progress(0.30, text='Henter data fra målere')
     #meters = IDs
     df = pd.DataFrame(columns=['meter', 'amount',  'from', 'hour'])   
-    url = 'https://api.eloverblik.dk/thirdpartyapi/api/meterdata/gettimeseries/' + str(fromdate) + '/2023-10-31/Hour'
+    url = 'https://api.eloverblik.dk/thirdpartyapi/api/meterdata/gettimeseries/' + str(fromdate) + '/'+str(todate)+'/Hour'
     headers = {'Authorization': 'Bearer ' + access_token,
     'Accept': 'application/json',
     'Content-Type': 'application/json'}
@@ -150,7 +150,7 @@ def eloverblik_timeseries(CVR, fromdate, todate, area):
 
     my_bar.progress(0.80, text='Samler data')
     samlet = df.merge(co2, how='left', left_on='from', right_on='HourDK')
-    samlet = samlet.rename(columns={'from':'datetime', 'amount': 'Mængde [kWh]'})
+    samlet = samlet.rename(columns={'from':'HourDK', 'amount': 'Mængde [kWh]'})
 
     samlet['UdledningPrTime [kg]'] = samlet['Mængde [kWh]'] * (samlet['CO2PerkWh']/1000)
     my_bar.progress(0.90, text='Laver filer')
@@ -164,10 +164,10 @@ def eloverblik_timeseries(CVR, fromdate, todate, area):
 
     return samlet, virksomhed
 
-def el_production(df):
+def el_production(df, fromdate, todate, area):
     # DeclarationGridMix
     response = requests.get(
-        url='https://api.energidataservice.dk/dataset/DeclarationGridmix?start=2022-01-01T00:00&limit=400000')
+        url='https://api.energidataservice.dk/dataset/DeclarationGridmix?start='+str(fromdate)+'T00:00&end='+str(todate)+'T00:00&&limit=400000')
 
     result = response.json()
 
@@ -176,10 +176,11 @@ def el_production(df):
     prod['HourDK'] = pd.to_datetime(prod['HourDK'])
     prod['percent'] =  prod['SharePPM'] / 1000000 * 100
     prod = prod[['HourDK', 'PriceArea', 'ReportGrp', 'percent']]
+    prod = prod[prod['PriceArea']==area]
 
     piv = prod.pivot_table(index=['HourDK', 'PriceArea'], columns='ReportGrp', values='percent').reset_index().fillna(0)
     dff = df.merge(piv, how='left', on='HourDK')
-    
+
     return dff
 
 
