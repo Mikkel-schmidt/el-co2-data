@@ -164,6 +164,23 @@ def eloverblik_timeseries(CVR, fromdate, todate, area):
 
     return samlet, virksomhed
 
+def el_production(df):
+    # DeclarationGridMix
+    response = requests.get(
+        url='https://api.energidataservice.dk/dataset/DeclarationGridmix?start=2022-01-01T00:00&limit=400000')
+
+    result = response.json()
+
+    prod = pd.json_normalize(result, 'records',
+                errors='ignore')
+    prod['HourDK'] = pd.to_datetime(prod['HourDK'])
+    prod['percent'] =  prod['SharePPM'] / 1000000 * 100
+    prod = prod[['HourDK', 'PriceArea', 'ReportGrp', 'percent']]
+
+    piv = prod.pivot_table(index=['HourDK', 'PriceArea'], columns='ReportGrp', values='percent').reset_index().fillna(0)
+    dff = df.merge(piv, how='left', on='HourDK')
+    
+    return dff
 
 
 

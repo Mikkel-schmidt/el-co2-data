@@ -8,7 +8,7 @@ from pyxlsb import open_workbook as open_xlsb
 
 
 #from streamlit_folium import st_folium
-from streamlit_functions import get_token, test_datahub, eloverblik_IDs, eloverblik_timeseries, check_password, authorizations
+from streamlit_functions import get_token, test_datahub, eloverblik_IDs, eloverblik_timeseries, check_password, authorizations, el_production
 #from streamlit_tree_select import tree_select
 from streamlit_extras.app_logo import add_logo
 
@@ -104,5 +104,9 @@ if check_password():
                 st.download_button(label='📥 Måler niveau',
                                 data=df_xlsx_s,
                                 file_name=f'{cvr} samlet.xlsx')
+                
+        with st.spinner('Henter produktionsdata'):
+            st.session_state.prod = el_production(virksomhed)
+            st.write(st.session_state.prod.head())
             
             
