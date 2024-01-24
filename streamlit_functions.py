@@ -150,11 +150,11 @@ def eloverblik_timeseries(CVR, fromdate, todate, area):
 
     my_bar.progress(0.80, text='Samler data')
     samlet = df.merge(co2, how='left', left_on='from', right_on='HourDK')
-    samlet = samlet.rename(columns={'from':'HourDK', 'amount': 'Mængde [kWh]'})
+    samlet = samlet.rename(columns={'amount': 'Mængde [kWh]'})
 
     samlet['UdledningPrTime [kg]'] = samlet['Mængde [kWh]'] * (samlet['CO2PerkWh']/1000)
     my_bar.progress(0.90, text='Laver filer')
-
+    st.write(samlet)
     virksomhed = samlet.groupby('HourDK').agg({'Mængde [kWh]':'sum', 'CO2PerkWh':'mean', 'UdledningPrTime [kg]':'sum'}).reset_index()
 
     # maler_excel = samlet.to_excel(CVR + ' målerniveau.xlsx', index=False)
