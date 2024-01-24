@@ -106,7 +106,7 @@ if check_password():
                                 file_name=f'{cvr} samlet.xlsx')
                 
         with st.spinner('Henter produktionsdata'):
-            st.session_state.prod = el_production(virksomhed)
+            st.session_state.prod = el_production(st.session_state.virksomhed)
             st.write(st.session_state.prod.head())
             
             
